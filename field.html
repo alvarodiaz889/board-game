@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <script src="actions.js"></script>
+</head>
+
+<body>    
+    <div id="main-panel">
+        <div id="extra-deck-column" class="left-panel w10 stack-bottom">
+            <div id="extra-deck-placeholder" class="droppable card card-height card-width centered mt-5 card-number border-white"
+                onclick="onDeckClick(event, 'extra-deck')"
+                ondrop="onPlaceHolderDropped(event)"
+                scroll-placeholder="extra-deck">
+                <span id="extra-deck-counter"></span>
+            </div>
+            <div id="extra-deck" class="h-scroller border-white absolute removed droppable stack-bottom" ondrop="onCardDropped(event)"></div>
+            <div class="header">
+                <input type="file" id="file-selector" onchange="onFileImported(event)" accept=".ydk">
+                <input type="file" id="data-selector" class="removed" onchange="getCardDataFromFile(event)" accept=".json">
+            </div>
+        </div>
+        <div id="field" class="left-panel w70 stack-bottom">
+            <div id="hand-row" class="card-row">
+                <div id="hand" 
+                    class="card card-height border-white droppable"
+                    ondrop="onCardDropped(event)"
+                    onmousewheel="onWheelMoved(event)">
+                    <div id="hand-actions">
+                        <div id="shuffle" onclick="onShuffle()"></div>
+                        <div id="draw" onclick="onDraw()"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="deck-column" class="left-panel w10 stack-bottom">
+            <div class="card-row card-row-height">
+                <div id="deck-placeholder" class="droppable card card-height card-width centered mt-5 card-number border-white"
+                    onclick="onDeckClick(event)"
+                    ondrop="onPlaceHolderDropped(event)"
+                    scroll-placeholder="deck">
+                    <span id="deck-counter"></span>
+                </div>
+            </div>
+            <div class="card-row card-row-height">
+                <div id="grave-placeholder" class="droppable centered mt-5 button-number"
+                    onclick="onDeckClick(event)"
+                    ondrop="onPlaceHolderDropped(event)"
+                    scroll-placeholder="grave">
+                    <span id="grave-counter"></span>
+                </div>
+            </div>
+            <div class="card-row card-row-height">
+                <div id="banished-placeholder" class="droppable centered mt-5 button-number"
+                    onclick="onDeckClick(event)"
+                    ondrop="onPlaceHolderDropped(event)"
+                    scroll-placeholder="banished">
+                    <span id="banished-counter"></span>
+                </div>
+            </div>
+        </div>
+        <div id="scroll-column" class="left-panel w10 stack-bottom">
+            <div id="deck" class="h-scroller border-white removed droppable stack-bottom" ondrop="onCardDropped(event)"></div>
+            <div id="grave" class="h-scroller border-white removed droppable stack-bottom" ondrop="onCardDropped(event)"></div>
+            <div id="banished" class="h-scroller border-white removed droppable stack-bottom" ondrop="onCardDropped(event)"></div>
+        </div>
+    </div>
+    <div id="card-details" class="centered">
+        <img id="card-details-image" src="resources/back-card.png" onclick="onCardDetailsClick()" />
+        <p id="card-details-description">No description available</p>
+    </div>
+</body>
+
+</html>
