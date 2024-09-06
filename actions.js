@@ -216,17 +216,11 @@ function onFileImported(event) {
         global.deckData = deck;
     };
 
-    reader.onloadend = function () {
-        getCardData()
-            .then(() => {
-                addCards();
-                alert("Cards successfully added to Deck!!");
-            })
-            .catch((error) => {
-                console.log(error);
-                openDataReader();
-            })
-    }
+    reader.onloadend = async () => {
+        await getCardData();
+        addCards();
+        alert("Cards successfully added to Deck!!");
+    };
 
     reader.readAsText(file);
 }
@@ -249,15 +243,69 @@ function cleanData() {
 }
 
 async function getCardData() {
-    let ids = Object.keys(global.deckData).join(",");
+    let ids = Object.keys(global.deckData);
+    let dataItems = await getCardDataFromMD();
 
-    const response = await fetch(constants.getCardsByIdsUrl + ids);
-    if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+    if (!dataItems.length) {
+        dataItems = await getCardDataFromGit();
     }
 
-    const data = await response.json();
-    data.forEach(cardData => processCardData(cardData));
+    ids.forEach(id => {
+        const itemFound = dataItems.find(dataItem => dataItem.konamiID === id);
+        if (itemFound) {
+            processCardData(itemFound);
+        }
+    });
+}
+
+async function getCardDataFromMD() {
+    try {
+        let ids = Object.keys(global.deckData);
+        const requestUrl = constants.getCardsByIdsUrl + ids.join(",");
+        const response = await fetch(requestUrl);
+    
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        } 
+        
+        return await response.json();
+    }
+    catch(error) {
+        console.log(error);
+        return [];
+    }
+}
+
+async function getCardDataFromGit() {
+    try {
+        const response = await fetch("https://alvarodiaz889.github.io/board-game/resources/data.json");
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let result = "";
+        let done = false;
+
+        // Read from the stream
+        while (!done) {
+            const { value, done: streamDone } = await reader.read();
+            done = streamDone;
+            if (value) {
+                const chunk = decoder.decode(value, { stream: !done }); 
+                result += chunk;
+            }
+        }
+        result = result.replace(/[^\x20-\x7E]/g, "");
+        result = JSON.parse(result);
+        
+        return result;
+    }
+    catch(error) {
+        console.log(error);
+        return [];
+    }
 }
 
 function openDataReader() {
