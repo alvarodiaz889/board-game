@@ -19,7 +19,7 @@ function onTouchMoved(event) {
         touch.target.style.position = "fixed";
         touch.target.style.left = `${touch.clientX - offsetX}px`;
         touch.target.style.top = `${touch.clientY - offsetY}px`;
-        event.preventDefault(); // Prevents scrolling during drag
+        //event.preventDefault(); // Prevents scrolling during drag
     }
 }
 
@@ -240,6 +240,14 @@ async function downloadImage(imageSrc) {
 
 function cleanData() {
     global.deckData = {};
+
+    Array.from(document.getElementsByClassName("card"))
+        .forEach(card =>
+        {
+            if (card.id.includes(":")) {
+                card.parentElement.removeChild(card);
+            }
+        });
 }
 
 async function getCardData() {
