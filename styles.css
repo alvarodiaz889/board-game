@@ -7,6 +7,35 @@ body, html {
   border: 0px;
 }
 
+#popup {
+  width: 20vw;
+  height: 20vh;
+  background-color: white;
+  border: 2px solid black;
+  position: fixed;
+  z-index: 2;
+  margin-top: 40vh;
+  margin-left: 40vw;
+  padding: 10px;
+}
+
+#popup input {
+  width: 100%;
+}
+
+#results {
+  margin-top: 5px;
+  overflow-y: auto;
+}
+
+#results p {
+  cursor: pointer;
+}
+
+#results p:hover {
+  background-color: cornflowerblue;
+}
+
 #main-panel {
   background-color: cornflowerblue;
   height: 100vh;
@@ -277,6 +306,7 @@ body, html {
   padding-top: 5px;
   align-items: center; /*vertically*/
   justify-content: center; /*horizontally*/
+  position: relative;
 }
 
 .card-row .card-placeholder {

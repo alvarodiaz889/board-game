@@ -53,6 +53,69 @@ function onRightClick(event) {
         .appendChild(event.target);
 }
 
+function onPopup(event) {
+    const isSearchCmd = event.ctrlKey && event.key === 'f';
+    const hasData = global.deckData && Object.keys(global.deckData).length;
+    if (!isSearchCmd || !hasData)
+    {
+        return;
+    }
+
+    event.preventDefault();
+    const popup = document.getElementById(constants.popup);
+    if (popup.classList.contains("removed")) {
+        popup.classList.remove("removed");
+        popup.classList.add("not-removed");
+        document.getElementById(constants.search).focus();
+        return;
+    }
+
+    document.getElementById(constants.search).value = "";
+    document.getElementById(constants.results).textContent = "";
+    popup.classList.remove("not-removed");
+    popup.classList.add("removed");
+}
+
+
+function onSearch(event) {
+    if (event.key !== "Enter")
+    {
+        return;
+    }
+
+    event.preventDefault();
+    const search = document.getElementById(constants.search).value.trim();
+    if (!search) {
+        return;
+    }
+
+    let foundAny = false;
+    const results = document.getElementById(constants.results);
+    results.textContent = "";
+    for (let card of Object.values(global.deckData)) {
+        if (card.name.toLowerCase().includes(search.toLowerCase())) {
+            const p = document.createElement('p');
+            p.textContent = card.name;
+            p.onclick = (event) => onSearchItemClick(event, `${card.konamiID}:1`);
+            results.appendChild(p);
+            foundAny = true;
+        }
+    }
+
+    if (!foundAny) {
+        results.textContent = "No Results found!";
+    }
+}
+
+function onSearchItemClick(event, id) {
+    event.preventDefault();
+    
+    document.getElementById(constants.hand)
+        .appendChild(document.getElementById(id));
+
+    updateCountLabels();
+}
+
 function onCardClick(event) {
     event.preventDefault();
     const cardId = event.target.id.split(":")[0];
@@ -145,8 +208,6 @@ function onDeckClick(event) {
             }
         });
 }
-
-
 
 function onWheelMoved(event) {
     event.preventDefault();
@@ -516,8 +577,12 @@ let constants = {
     hand: "hand",
     deck: "deck",
     droppable: "droppable",
-    scrollPlaceholder: "scroll-placeholder"
+    scrollPlaceholder: "scroll-placeholder",
+    popup: "popup",
+    search: "search",
+    results: "results"
 };
 
 window.onload = onStartup;
 window.ondragover = allowDrop;
+window.onkeydown = onPopup;

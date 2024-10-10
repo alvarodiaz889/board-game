@@ -6,7 +6,12 @@
     <script src="actions.js"></script>
 </head>
 
-<body>    
+<body>
+    <div id="popup" class="removed">
+        <input id="search" type="text" onkeydown="onSearch(event)"/>
+        <div id="results">
+        </div>
+    </div>
     <div id="main-panel">
         <div id="extra-deck-column" class="left-panel w10 stack-bottom">
             <div id="extra-deck-placeholder" class="droppable card card-height card-width centered mt-5 card-number border-white"
