@@ -26,6 +26,7 @@ body, html {
 #results {
   margin-top: 5px;
   overflow-y: auto;
+  max-height: 10vh;
 }
 
 #results p {

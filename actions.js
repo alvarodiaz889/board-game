@@ -94,10 +94,12 @@ function onSearch(event) {
     results.textContent = "";
     for (let card of Object.values(global.deckData)) {
         if (card.name.toLowerCase().includes(search.toLowerCase())) {
-            const p = document.createElement('p');
-            p.textContent = card.name;
-            p.onclick = (event) => onSearchItemClick(event, `${card.konamiID}:1`);
-            results.appendChild(p);
+            for (let counter = 1; counter <= card.count; counter++) {
+                const p = document.createElement('p');
+                p.textContent = `${card.name} (${counter})`;
+                p.onclick = (event) => onSearchItemClick(event, `${card.konamiID}:${counter}`);
+                results.appendChild(p);
+            }
             foundAny = true;
         }
     }
