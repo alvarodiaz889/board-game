@@ -148,12 +148,12 @@ function allowDrop(event) {
 }
 
 function onDragStarted(event) {
-    event.dataTransfer.setData("cardId", event.target.id);
+    localStorage.setItem("cardId", event.target.id);
 }
 
 function onCardDropped(event) {
     event.preventDefault();
-    const cardId = event.dataTransfer.getData("cardId");
+    const cardId = localStorage.getItem("cardId");
     const cardElement = document.getElementById(cardId);
     let parent = event.target;
 
