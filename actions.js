@@ -168,7 +168,7 @@ function onCardDropped(event) {
 function onPlaceHolderDropped(event) {
     event.preventDefault();
 
-    const cardId = event.dataTransfer.getData("cardId");
+    const cardId = localStorage.getItem("cardId");
     const cardElement = document.getElementById(cardId);
     let placeHolder = event.target;
 
